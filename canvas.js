@@ -11,67 +11,43 @@ window.onload = function () {
     canvas.width = 500; // реальная ширина холста
     canvas.height = 300; // реальная высота холта
 
-    context.lineWidth = 4; // толщина линии
-    context.strokeStyle = '#666'; // цвет обводки
+    context.lineWidth = 1.5; // толщина линии
+    context.strokeStyle = 'red'; // цвет обводки
     context.fillStyle = 'red'; // цвет заливки
 
+    var is_draw = false;
 
-/*
-    //линия
-    // начинае цыкл рисования -- поднесли руку к холсту
-    context.beginPath();
-    context.moveTo(30,30); // прийти в точку 30 30
+    canvas.onmousedown = function (e) {
 
-    // координаты от левой верхней точки по X и Y
+        is_draw = true;
+        var coords = get_getcoords(e,canvas);
+        context.beginPath();
+        context.moveTo(coords.x,coords,coords.y);
+    };
 
-    context.lineTo(30,130);
-    context.lineTo(400,130);
-    context.lineTo(30,30);
-    context.stroke(); // делаем обводку
-    context.fill(); // делаем заливку
-    context.closePath(); // конец цикла; // стирает в памяти линии которые нарисовали;
-/*
-    // квадрат
-    context.beginPath();
-    context.rect(0,150,100,100);
-    context.fill();
-    context.closePath();
+    canvas.onmousemove = function (e) {
 
-    // более короткий способ
+        if(!is_draw) return;
 
-    context.fillRect();
-    context.strokeRect();
+        var coords = get_getcoords(e,canvas);
+        context.lineTo(coords.x,coords.y);
+        context.stroke();
+    };
 
-    //окружность
+    canvas.onmouseleave = function (e) {
+        is_draw = false;
+        context.closePath();
+    };
 
-    context.beginPath()
-    context.arc(200,130,50,0,2*Math.PI);
-    context.stroke();
-    context.fill();
-    context.closePath();
-    */
+    canvas.onmouseup = function (e) {
+        is_draw = false;
+        context.closePath();
+    };
 
-/*
-    //кривые
+    function get_getcoords(event,element) {
+        var x = event.pageX - element.offsetLeft;
+        var y = event.pageY - element.offsetTop;
+        return {x:x,y:y}
 
-    context.beginPath();
-    context.moveTo(130,130);
-    context.quadraticCurveTo(10,100,50,50);
-    context.stroke();
-    context.closePath();
-
-    // кривые бизье
-
-    context.beginPath();
-    context.moveTo(150,150);
-    context.bezierCurveTo(10,-90,-50,90,50,20);
-    context.stroke();
-    context.closePath();
-*/
-
-
-    /* шрифты */
-    context.font ='100px Georgia'; // стили шрифта
-    // context.fillText('Hello World',10,50);
-    context.strokeText('Hello World',10,100);
+    }
 };
